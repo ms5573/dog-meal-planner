@@ -1,20 +1,34 @@
 import React, { useState } from 'react';
 
-function Questionnaire({ onSubmit }) {
+function Questionnaire() {
   const [dogSize, setDogSize] = useState('small');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(dogSize);
+    generatePDF(dogSize);
+  };
+
+  const generatePDF = (size) => {
+    const pdfUrl = `/${size}_dog_meal_plan.pdf`;
+    
+    // Open the PDF in a new tab
+    //window.open(pdfUrl, '_blank');
+
+    // Alternatively, if you want to trigger a download instead:
+    const link = document.createElement('a');
+    link.href = pdfUrl;
+    link.download = `${size}_dog_meal_plan.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
     <div className="questionnaire">
-      <h2>Dog Questionnaire</h2>
+      <h1>Dog Questionnaire</h1>
+      <p>What is the size of your dog?</p>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="dogSize">What is the size of your dog?</label>
         <select
-          id="dogSize"
           value={dogSize}
           onChange={(e) => setDogSize(e.target.value)}
         >
